@@ -6,17 +6,21 @@
  * @flow strict-local
  */
 
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import type {Node} from 'react';
 import React from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import MyContacts from './screens/MyContacts';
+
+const Stack = createStackNavigator();
 
 const App: () => Node = () => {
   return (
-    <SafeAreaView>
-      <View>
-        <Text>{'Hello world'}</Text>
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="MyContacts">
+        <Stack.Screen name="MyContacts" component={MyContacts} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
