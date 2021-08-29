@@ -1,13 +1,57 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  FlatList,
+  Platform,
+  TouchableOpacity,
+  View,
+  Text,
+} from 'react-native';
+import Contacts from 'react-native-contacts';
+import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {styles} from './MyContacts.style';
 
-const MyContacts = ({navigation}) => {
+export default function MyContacts({navigation}) {
+  const isFocused = useIsFocused();
+
+  const [myContacts, setMyContacts] = useState([]);
+
+  useEffect(() => {
+    getAllContacts();
+  }, [isFocused]);
+
+  async function getAllContacts() {
+    try {
+      const result = await request(
+        Platform.select({
+          android: PERMISSIONS.ANDROID.READ_CONTACTS,
+          ios: PERMISSIONS.IOS.CONTACTS,
+        }),
+      );
+      if (result === RESULTS.GRANTED) {
+        const contacts = await Contacts.getAll();
+        console.log('contacts -->', contacts);
+        setMyContacts(contacts);
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(error);
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>{'Hello contacts'}</Text>
+    <View style={styles.styles}>
+      <FlatList
+        data={myContacts}
+        keyExtractor={item => item.recordID}
+        renderItem={({item}) => (
+          <TouchableOpacity onPress={() => Alert.alert('pressed')}>
+            <Text>{'shiva'}</Text>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
-};
-
-export default MyContacts;
+}
