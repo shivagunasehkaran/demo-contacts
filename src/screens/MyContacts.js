@@ -1,15 +1,9 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  FlatList,
-  Platform,
-  TouchableOpacity,
-  View,
-  Text,
-} from 'react-native';
+import {FlatList, Platform, TouchableOpacity, View} from 'react-native';
 import Contacts from 'react-native-contacts';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import ContactCard from '../components/ContactCard';
 import {styles} from './MyContacts.style';
 
 export default function MyContacts({navigation}) {
@@ -31,7 +25,6 @@ export default function MyContacts({navigation}) {
       );
       if (result === RESULTS.GRANTED) {
         const contacts = await Contacts.getAll();
-        console.log('contacts -->', contacts);
         setMyContacts(contacts);
       } else {
         return false;
@@ -47,8 +40,8 @@ export default function MyContacts({navigation}) {
         data={myContacts}
         keyExtractor={item => item.recordID}
         renderItem={({item}) => (
-          <TouchableOpacity onPress={() => Alert.alert('pressed')}>
-            <Text>{'shiva'}</Text>
+          <TouchableOpacity onPress={() => console.log('sdfsdf')}>
+            <ContactCard contactInfo={item} />
           </TouchableOpacity>
         )}
       />
