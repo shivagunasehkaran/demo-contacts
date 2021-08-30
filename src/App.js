@@ -12,6 +12,7 @@ import type {Node} from 'react';
 import React from 'react';
 import MyContacts from './screens/MyContacts/MyContacts';
 import CreateContact from './screens/CreateContact/CreateContact';
+import Profile from './screens/Profile/Profile';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ const App: () => Node = () => {
       <Stack.Navigator initialRouteName="MyContacts">
         <Stack.Screen name="MyContacts" component={MyContacts} />
         <Stack.Screen name="CreateContact" component={CreateContact} />
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
