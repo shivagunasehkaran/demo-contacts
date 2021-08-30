@@ -20,6 +20,7 @@ export default function CreateContact({navigation, route}) {
       : '',
   );
 
+  // manage contacts for both add and existing contact
   function manageContacts() {
     if (!name && !email && !phoneNumber) {
       Alert.alert('Something went wrong', 'Please fill the all fields');
@@ -29,13 +30,14 @@ export default function CreateContact({navigation, route}) {
 
     const myEmail = [{label: 'email', email: email}];
 
+    // do add and existing contact based on existingData
     if (existingData === undefined) {
       const contactInfo = {
         givenName: name,
         emailAddresses: myEmail,
         phoneNumbers: myPhonenumber,
       };
-
+      // addContact api
       Contacts.addContact(contactInfo)
         .then(() => navigation.navigate('MyContacts'))
         .catch(error => console.log(error));
@@ -47,6 +49,7 @@ export default function CreateContact({navigation, route}) {
         phoneNumbers: myPhonenumber,
       };
 
+      // editExistingContact api
       Contacts.editExistingContact(contactInfo)
         .then(() => navigation.navigate('MyContacts'))
         .catch(error => console.log(error));

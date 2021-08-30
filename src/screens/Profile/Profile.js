@@ -18,8 +18,6 @@ export default function Profile({navigation, route}) {
     getContact(route.params.contactInfo.id);
   }, [route.params.contactInfo.id]);
 
-  console.log('contactInfo -- >', contactInfo);
-
   function getContact(id) {
     Contacts.getContactById(id)
       .then(contact => {
