@@ -1,50 +1,56 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Alert, Button, TextInput, View} from 'react-native';
 import Contacts from 'react-native-contacts';
 import {styles} from './CreateContact.style';
 
-export default function CreateContact({navigation}) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumbers, setPhoneNumbers] = useState(['']);
+export default function CreateContact({navigation, route}) {
+  const existingData = route.params && route.params.contactInfo;
 
-  useEffect(() => {
-    if (phoneNumbers[phoneNumbers.length - 1].length > 0) {
-      setPhoneNumbers(prevState => [...prevState, '']);
-    }
-    try {
-      if (
-        phoneNumbers[phoneNumbers.length - 2].length === 0 &&
-        phoneNumbers.length >= 2
-      ) {
-        setPhoneNumbers(prevState => {
-          const newState = prevState.slice();
-          newState.pop();
-          return newState;
-        });
-      }
-    } catch {}
-  }, [phoneNumbers]);
+  const [name, setName] = useState(
+    existingData !== undefined ? existingData.givenName : '',
+  );
+  const [email, setEmail] = useState(
+    existingData && existingData.emailAddresses[0] !== undefined
+      ? existingData.emailAddresses[0].email
+      : '',
+  );
+  const [phoneNumber, setPhoneNumber] = useState(
+    existingData && existingData.phoneNumbers[0] !== undefined
+      ? existingData.phoneNumbers[0].number
+      : '',
+  );
 
-  function addContact() {
-    if ((!firstName && !lastName && !email) || phoneNumbers.length === 1) {
+  function manageContacts() {
+    if (!name && !email && !phoneNumber) {
       Alert.alert('Something went wrong', 'Please fill the all fields');
       return;
     }
-    const myPhonenumbers = phoneNumbers.map(ph => {
-      return {label: 'mobile', number: ph};
-    });
+    const myPhonenumber = [{label: 'phone', number: phoneNumber}];
 
-    const contactInfo = {
-      displayName: firstName + ' ' + lastName,
-      givenName: firstName + ' ' + lastName,
-      email: email,
-      phoneNumbers: myPhonenumbers,
-    };
-    Contacts.addContact(contactInfo)
-      .then(() => navigation.navigate('MyContacts'))
-      .catch(error => console.log(error));
+    const myEmail = [{label: 'email', email: email}];
+
+    if (existingData === undefined) {
+      const contactInfo = {
+        givenName: name,
+        emailAddresses: myEmail,
+        phoneNumbers: myPhonenumber,
+      };
+
+      Contacts.addContact(contactInfo)
+        .then(() => navigation.navigate('MyContacts'))
+        .catch(error => console.log(error));
+    } else {
+      const contactInfo = {
+        recordID: existingData.recordID,
+        givenName: name,
+        emailAddresses: myEmail,
+        phoneNumbers: myPhonenumber,
+      };
+
+      Contacts.editExistingContact(contactInfo)
+        .then(() => navigation.navigate('MyContacts'))
+        .catch(error => console.log(error));
+    }
   }
 
   return (
@@ -52,15 +58,9 @@ export default function CreateContact({navigation}) {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="FirstName"
-          value={firstName}
-          onChangeText={text => setFirstName(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="LastName"
-          value={lastName}
-          onChangeText={text => setLastName(text)}
+          placeholder="Name"
+          value={name}
+          onChangeText={text => setName(text)}
         />
         <TextInput
           style={styles.input}
@@ -68,25 +68,15 @@ export default function CreateContact({navigation}) {
           value={email}
           onChangeText={text => setEmail(text)}
         />
+        <TextInput
+          style={styles.input}
+          placeholder="Phone"
+          value={phoneNumber}
+          onChangeText={text => setPhoneNumber(text)}
+        />
       </View>
-      {phoneNumbers.map((phoneNumber, index) => (
-        <View style={{...styles.inputContainer, marginVertical: 0}} key={index}>
-          <TextInput
-            style={styles.input}
-            placeholder="Phone Number"
-            keyboardType="number-pad"
-            value={phoneNumber}
-            onChangeText={text =>
-              setPhoneNumbers(prevState => {
-                const newState = prevState.slice();
-                newState[index] = text;
-                return newState;
-              })
-            }
-          />
-        </View>
-      ))}
-      <Button title="Save" onPress={() => addContact()} />
+
+      <Button title="Save" onPress={() => manageContacts()} />
     </View>
   );
 }
