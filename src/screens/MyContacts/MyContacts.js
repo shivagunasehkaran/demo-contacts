@@ -49,7 +49,12 @@ export default function MyContacts({navigation}) {
             data={myContacts}
             keyExtractor={item => item.recordID}
             renderItem={({item}) => (
-              <TouchableOpacity onPress={() => console.log('sdfsdf')}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Profile', {
+                    contactInfo: {id: item.recordID},
+                  })
+                }>
                 <ContactCard contactInfo={item} />
               </TouchableOpacity>
             )}
