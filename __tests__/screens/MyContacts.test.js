@@ -10,6 +10,11 @@ describe('MyContacts screen', () => {
     const wrapper = shallow(<MyContacts />);
     expect(wrapper).toMatchSnapshot();
   });
+
+  it('should render state text element', async () => {
+    const wrapper = shallow(<MyContacts />);
+    expect(wrapper.find('Text')).toHaveLength(1);
+  });
 });
 
 describe('MyContacts screen : flatlist', () => {
