@@ -10,7 +10,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import type {Node} from 'react';
 import React from 'react';
-import MyContacts from './screens/MyContacts';
+import MyContacts from './screens/MyContacts/MyContacts';
+import CreateContact from './screens/CreateContact/CreateContact';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ const App: () => Node = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="MyContacts">
         <Stack.Screen name="MyContacts" component={MyContacts} />
+        <Stack.Screen name="CreateContact" component={CreateContact} />
       </Stack.Navigator>
     </NavigationContainer>
   );
