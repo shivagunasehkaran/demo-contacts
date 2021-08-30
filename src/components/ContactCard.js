@@ -5,14 +5,15 @@ import {styles} from './ContactCard.style';
 
 const ContactsCard = props => {
   let contactInfo = props.contactInfo ? props.contactInfo : null;
-  const color = getColorByLetter(contactInfo.familyName[0]);
+  let givenName = contactInfo ? contactInfo.givenName : '';
+  const color = getColorByLetter(givenName[0]);
   return (
     <View style={styles.card}>
       <View style={styles.infoContainer}>
         <View style={{...styles.icon, backgroundColor: color}}>
-          <Text style={styles.iconContent}>{contactInfo.familyName[0]}</Text>
+          <Text style={styles.iconContent}>{givenName[0]}</Text>
         </View>
-        <Text style={styles.primaryText}>{contactInfo.familyName}</Text>
+        <Text style={styles.primaryText}>{givenName}</Text>
       </View>
     </View>
   );
