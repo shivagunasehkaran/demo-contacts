@@ -1,9 +1,19 @@
+/**
+ * @format
+ * @flow strict-local
+ */
 import React from 'react';
+import type {Node} from 'react';
 import {Text, View} from 'react-native';
 import {getColorByLetter} from '../utills/index';
 import {styles} from './ContactCard.style';
 
-const ContactsCard = props => {
+type ContactsCardProp = {
+  contactInfo: Object,
+  onPress: Function,
+};
+
+const ContactsCard = (props: ContactsCardProp): Node => {
   let contactInfo = props.contactInfo ? props.contactInfo : null;
   let givenName = contactInfo ? contactInfo.givenName : '';
   const color = getColorByLetter(givenName[0]);
