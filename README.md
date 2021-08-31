@@ -78,9 +78,7 @@ Please go ahead and play around  :)
   - Provided Loader (Activity indicator) before API calling. Loader will shown in upper middle of the screen, just for user interaction.
   - Created Navigator and Routes for maintaining stacks/screens
   - Created ColourPalette for maintaining colors
-  - Created Utility function for maintaining all application static text's
-  - Created Constant file for maintaining API url's
-
+  
   
   ## Screenshots for the output
 
